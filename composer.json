@@ -1,6 +1,24 @@
 {
   "name": "cronbeats/cronbeats-php",
-  "description": "Official CronBeats Ping SDK for PHP.",
+  "description": "Cron job monitoring and heartbeat monitoring SDK for PHP. Monitor scheduled tasks, background jobs, and cron jobs with simple ping telemetry. Get alerts when cron jobs fail, miss their schedule, or run too long.",
+  "keywords": [
+    "cron",
+    "monitoring",
+    "cron monitoring",
+    "cron job monitoring",
+    "heartbeat",
+    "heartbeat monitoring",
+    "ping",
+    "ping telemetry",
+    "scheduler",
+    "scheduled tasks",
+    "background jobs",
+    "job monitoring",
+    "alerting",
+    "cron alerts",
+    "devops",
+    "cronbeats"
+  ],
   "type": "library",
   "license": "MIT",
   "require": {
