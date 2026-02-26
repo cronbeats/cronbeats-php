@@ -53,19 +53,78 @@ try {
 }
 ```
 
-## Progress Updates
+## Progress Tracking
+
+Track your job's progress in real-time. CronBeats supports two distinct modes:
+
+### Mode 1: With Percentage (0-100)
+Shows a **progress bar** and your status message on the dashboard.
+
+✓ **Use when**: You can calculate meaningful progress (e.g., processed 750 of 1000 records)
 
 ```php
 <?php
 
-// Path seq form
-$client->progress(50, 'Processing batch 50/100');
+// Percentage mode: 0-100 with message
+$client->progress(50, 'Processing batch 500/1000');
 
-// Options form
+// Or using options array
 $client->progress([
     'seq' => 75,
-    'message' => 'Almost done',
+    'message' => 'Almost done - 750/1000',
 ]);
+```
+
+### Mode 2: Message Only
+Shows **only your status message** (no percentage bar) on the dashboard.
+
+✓ **Use when**: Progress isn't measurable or you only want to send status updates
+
+```php
+<?php
+
+// Message-only mode: null seq, just status updates
+$client->progress(null, 'Connecting to database...');
+$client->progress(null, 'Starting data sync...');
+```
+
+### What you see on the dashboard
+- **Mode 1**: Progress bar (0-100%) + your message → "75% - Processing batch 750/1000"
+- **Mode 2**: Only your status message → "Connecting to database..."
+
+### Complete Example
+
+```php
+<?php
+
+$client = new PingClient('abc123de');
+$client->start();
+
+try {
+    // Message-only updates for non-measurable steps
+    $client->progress(null, 'Connecting to database...');
+    $db = connectToDatabase();
+    
+    $client->progress(null, 'Fetching records...');
+    $total = $db->count();
+    
+    // Percentage updates for measurable progress
+    for ($i = 0; $i < $total; $i++) {
+        processRecord($i);
+        
+        if ($i % 100 === 0) {
+            $percent = (int)($i * 100 / $total);
+            $client->progress($percent, "Processed $i / $total records");
+        }
+    }
+    
+    $client->progress(100, 'All records processed');
+    $client->success();
+    
+} catch (Exception $e) {
+    $client->fail();
+    throw $e;
+}
 ```
 
 ## Error Handling
